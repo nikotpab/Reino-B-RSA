@@ -28,6 +28,7 @@ img = Image.open("main.png")
 img = img.resize((1400,800))
 img = ImageTk.PhotoImage(img)
 
+
 canvas = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
 canvas.place(x=0, y=0)
 canvas.bg = img
@@ -41,11 +42,12 @@ module=0
 phi=0
 e=0
 d=0
-message=0
+message=""
 messageChiper=0
 messageDechiper=0
 message_encrypted_b64 = ""
 message_decrypted_str = ""
+enc_str = ""
 
 def is_prime(n: int) -> bool:
     if n <= 1:
@@ -57,6 +59,80 @@ def is_prime(n: int) -> bool:
 
 def is_coprime(a: int, b: int) -> bool:
     return math.gcd(a, b) == 1
+
+
+CONTROL_NAMES = {
+    0: "NUL", 1: "SOH", 2: "STX", 3: "ETX", 4: "EOT", 5: "ENQ", 6: "ACK", 7: "BEL",
+    8: "BS", 9: "HT", 10: "LF", 11: "VT", 12: "FF", 13: "CR", 14: "SO", 15: "SI",
+    16: "DLE", 17: "DC1", 18: "DC2", 19: "DC3", 20: "DC4", 21: "NAK", 22: "SYN", 23: "ETB",
+    24: "CAN", 25: "EM", 26: "SUB", 27: "ESC", 28: "FS", 29: "GS", 30: "RS", 31: "US",
+    127: "DEL"
+}
+
+def bytes_to_visible(barr: bytes) -> str:
+    parts = []
+    for b in barr:
+        if 0x20 <= b <= 0x7E:
+            parts.append(chr(b))
+        elif b in CONTROL_NAMES:
+            parts.append(f"[{CONTROL_NAMES[b]}]")
+        else:
+            parts.append(f"[0x{b:02X}]")
+    return "".join(parts)
+
+
+def enc_message(msg: str) -> str:
+    global e, module
+    if module <= 1 or e <= 0:
+        return ""
+    data = str(msg).encode("utf-8")
+    if module > 255:
+        parts = [str(pow(b, e, module)) for b in data]
+        return ",".join(parts)
+    else:
+        digits = []
+        for b in data:
+            hi = (b >> 6) & 0x3F
+            lo = b & 0x3F
+            digits.extend([hi, lo])
+        enc_digits = [str(pow(dig, e, module)) for dig in digits]
+        return ",".join(enc_digits)
+
+
+def enc_messagae(msg: str) -> str:
+    return enc_message(msg)
+
+def deenc_message(cipher_str: str) -> str:
+    global d, module
+    if module <= 1 or d <= 0:
+        return ""
+    s = str(cipher_str)
+    out = bytearray()
+    tokens = [t for t in s.strip().split(",") if t]
+    if module <= 255:
+        nums = []
+        for t in tokens:
+            try:
+                c = int(t)
+                m = pow(c, d, module)
+                nums.append(m)
+            except Exception:
+                continue
+        for i in range(0, len(nums), 2):
+            if i + 1 < len(nums):
+                hi = nums[i] & 0x3F
+                lo = nums[i + 1] & 0x3F
+                b = (hi << 6) | lo
+                out.append(b)
+    else:
+        for t in tokens:
+            try:
+                c = int(t)
+                m = pow(c, d, module)
+                out.append(m & 0xFF)
+            except Exception:
+                continue
+    return bytes_to_visible(out)
 
 def firstPanel(event=None):
     img = Image.open("first.png")
@@ -152,7 +228,7 @@ def eighthPanel(event=None):
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
     btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
-    canvas2.tag_bind(btnContinue, "<Button-1>",ninthPanel)
+    canvas2.tag_bind(btnContinue, "<Button-1>", ninthPanel)
 
 def ninthPanel(event=None):
     img = Image.open("ninth.png")
@@ -214,7 +290,6 @@ def tenthPanel(event=None):
             notPrime(tenthPanel)
             return
         module = p * q
-
         eleventhPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
@@ -357,24 +432,33 @@ def seventeenthPanel(event=None):
     )
 
     def continuar(event=None):
-        global p, q, phi,e
-        value1 = inpNumb1.get()
+        global phi, e
+        value1 = inpNumb1.get().strip()
 
-        if value1 == "" :
+        # Validaciones con retornos tempranos
+        if value1 == "":
             whiteException(seventeenthPanel)
+            return
 
-        elif not value1.isdigit() :
+        if not value1.isdigit():
             notNumber(seventeenthPanel)
+            return
 
-        else:
-            n1 = int(value1)
+        n1 = int(value1)
 
-        if not is_coprime(n1,phi):
+        # 1) Rango básico RSA: 1 < e < phi(n)
+        if n1 <= 1 or n1 >= phi:
+            notNumber(seventeenthPanel)
+            return
+
+        # 2) Única condición requerida: gcd(e, phi) == 1
+        if not is_coprime(n1, phi):
             notCoPrime(seventeenthPanel)
+            return
 
-        else:
-            e = int(value1)
-            eighteenthPanel()
+        # Si todo ok, asigna e y avanza
+        e = n1
+        eighteenthPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
@@ -450,7 +534,7 @@ def nineteenthPanel(event=None):
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
 def twentiethPanel(event=None):
-    global e,phi,d
+    global e, phi, d, p, q
     img = Image.open("twentieth.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
@@ -466,8 +550,8 @@ def twentiethPanel(event=None):
     canvas2.create_window(425, 150, window=outTxt1)
     canvas2.create_window(480, 217, window=outTxt2)
     canvas2.create_window(984, 250, window=outTxt3)
-    d= pow(e, -1, phi)
-    value3=d
+    d = pow(e, -1, phi)
+    value3 = d
     outTxt1.insert(0, e)
     outTxt1.config(state="readonly",)
     outTxt1.focus()
@@ -478,8 +562,6 @@ def twentiethPanel(event=None):
     outTxt3.config(state="readonly",)
     outTxt3.focus()
 
-
-
     btnContinue = canvas2.create_text(
         1250, 630,
         text="Continuar...",
@@ -488,7 +570,6 @@ def twentiethPanel(event=None):
     )
 
     def continuar(event=None):
-
         twentyfirstPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
@@ -525,7 +606,7 @@ def twentysecondPanel(event=None):
     value = f"e = {e}"
     value2 = f"d = {d}"
     value3 = f"n = {module}"
-    value4 = f"φ(n) = {phi}"
+    value4 = f"n = {module}"
 
     outNumb1.insert(0, value)
     outNumb1.config(state="readonly",)
@@ -581,14 +662,13 @@ def twentythirdPanel(event=None):
     )
 
     def continuar(event=None):
+        global message
         value1 = inpTxt1.get()
-        message=value1
-
-        if value1 == "" :
-            print("Campos vacios")
+        if value1 == "":
             whiteException(twentythirdPanel)
-        else:
-           twentyfourthPanel()
+            return
+        message = value1
+        twentyfourthPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
@@ -602,8 +682,8 @@ def twentyfourthPanel(event=None):
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
 
-    outNumb1 = tk.Entry(root, width=21, font=("UnifrakturCook", 12), justify="center", bg="black", fg="white")
-    outNumb2 = tk.Entry(root, width=21, font=("UnifrakturCook", 12), justify="center", bg="black", fg="white")
+    outNumb1 = tk.Entry(root, width=21, font=("UnifrakturCook", 12), justify="center", bg="white")
+    outNumb2 = tk.Entry(root, width=21, font=("UnifrakturCook", 12), justify="center", bg="white" )
 
     global e, d, module, phi
     value = e
@@ -611,10 +691,10 @@ def twentyfourthPanel(event=None):
     value3 = module
     value4 = phi
 
-    outNumb1.insert(0, "("+str(value3)+","+str(value)+")")
+    outNumb1.insert(0, "("+str(value)+","+str(value3)+")")
     outNumb1.config(state="readonly")
     outNumb1.focus()
-    outNumb2.insert(0, "("+str(value3)+","+str(value2 )+")")
+    outNumb2.insert(0, "("+str(value2)+","+str(value3)+")")
     outNumb2.config(state="readonly")
     outNumb2.focus()
 
@@ -722,7 +802,7 @@ def twentyninthPanel(event=None):
     canvas2.tag_bind(btnContinue, "<Button-1>", thirtiethPanel)
 
 def thirtiethPanel(event=None):
-    global messageDechiper
+    global message, e, module, d, enc_str
     img = Image.open("thirtieth.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
@@ -732,18 +812,21 @@ def thirtiethPanel(event=None):
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
 
-    outTxt1 = tk.Entry(root, width=21, font=("UnifrakturCook", 14),justify="center")
-    
-    canvas2.create_window(650, 193, window=outTxt1)  
-   
+    outEnc = tk.Entry(root, width=48, font=("UnifrakturCook", 14), justify="center")
 
-   
-   
- 
-    outTxt1.insert(0, value)
-    outTxt1.config(state="readonly",)
 
-    
+    canvas2.create_window(700, 190, window=outEnc)
+
+
+    if module <= 1 or e <= 0 or d <= 0:
+        enc_str = ""
+    else:
+        enc_str = enc_message(message)
+
+    outEnc.insert(0, enc_str)
+    outEnc.config(state="readonly")
+    outEnc.focus()
+
 
     btnContinue = canvas2.create_text(
         1250, 630,
@@ -753,7 +836,7 @@ def thirtiethPanel(event=None):
     )
 
     def continuar(event=None):
-      
+
             thirtyfirstPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
@@ -770,26 +853,24 @@ def thirtyfirstPanel(event=None):
 
     outTxt1 = tk.Entry(root, width=25, font=("UnifrakturCook", 14),justify="center")
     outTxt2 = tk.Entry(root, width=25, font=("UnifrakturCook", 14),justify="center")
-    outTxt3 = tk.Entry(root, width=25, font=("UnifrakturCook", 14),justify="center")
 
 
-    canvas2.create_window(800, 320, window=outTxt1)  
-    canvas2.create_window(780, 425, window=outTxt2)  
-    canvas2.create_window(800, 530, window=outTxt3)  
+    canvas2.create_window(690, 310, window=outTxt1)
+    canvas2.create_window(660, 400, window=outTxt2)
 
+    global e, d, module, phi, enc_str
+    value = e
+    value2 = d
+    value3 = module
+    value4 = phi
 
-    value="(4,5)"
-    value2=0
-    value3=0
- 
-    outTxt1.insert(0, value)
+    outTxt1.insert(0, "("+str(value2)+","+str(value3)+")")
+    outTxt2.insert(0, str(enc_str))
+
     outTxt1.config(state="readonly",)
-
-    outTxt2.insert(0, value)
     outTxt2.config(state="readonly",)
-
-    outTxt2.insert(0, value)
-    outTxt3.config(state="readonly",)
+    outTxt1.focus()
+    outTxt2.focus()
 
     btnContinue = canvas2.create_text(
         1250, 630,
@@ -799,7 +880,7 @@ def thirtyfirstPanel(event=None):
     )
 
     def continuar(event=None):
-      
+
             thirtysecondPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
@@ -816,25 +897,23 @@ def thirtysecondPanel(event=None):
 
     outTxt1 = tk.Entry(root, width=16, font=("UnifrakturCook", 14),justify="center")
     outTxt2 = tk.Entry(root, width=16, font=("UnifrakturCook", 14),justify="center")
-    
 
+    canvas2.create_window(1016, 328, window=outTxt1)
+    canvas2.create_window(1018, 505, window=outTxt2)
 
-    canvas2.create_window(1016, 328, window=outTxt1)  
-    canvas2.create_window(1018, 505, window=outTxt2)  
-    
+    global e, d, module, phi, enc_str
+    value = e
+    value2 = d
+    value3 = module
+    value4 = phi
 
+    outTxt1.insert(0, "(" + str(value2) + "," + str(value3) + ")")
+    outTxt2.insert(0, str(deenc_message(enc_str)))
 
-    value="(4,5)"
-    value2=0
-    value3=0
- 
-    outTxt1.insert(0, value)
     outTxt1.config(state="readonly",)
-
-    outTxt2.insert(0, value)
     outTxt2.config(state="readonly",)
-
-    
+    outTxt1.focus()
+    outTxt2.focus()
 
     btnContinue = canvas2.create_text(
         1250, 630,
@@ -844,7 +923,7 @@ def thirtysecondPanel(event=None):
     )
 
     def continuar(event=None):
-      
+
             thirtythirdPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
@@ -858,8 +937,9 @@ def thirtythirdPanel(event=None):
     canvas2.place(x=0, y=0)
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
-    btnContinue = canvas2.create_text(1250, 630, text="Finalizar", font=("UnifrakturCook", 40, "bold"), fill="white")
+    btnContinue = canvas2.create_text(700, 630, text="holaaa", font=("UnifrakturCook", 40, "bold"), fill="white")
     canvas2.tag_bind(btnContinue, "<Button-1>", firstPanel)
+
     #Excepciones
 
 def notCoPrime (panel):
@@ -908,7 +988,7 @@ def whiteException(panel):
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
     btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
-    canvas2.tag_bind(btnContinue, "<Button-1>", panel)   
+    canvas2.tag_bind(btnContinue, "<Button-1>", panel)
 
 btn = canvas.create_text(700, 300, text="Iniciar", font=("UnifrakturCook", 40, "bold"), fill="white")
 canvas.tag_bind(btn, "<Button-1>", firstPanel)
@@ -963,7 +1043,7 @@ def export_to_pdf():
 
 
     for line in references_text.strip().split('\n'):
-        if line.strip():  # Ignora líneas en blanco
+        if line.strip():
             if "##" in line:
 
                 story.append(Paragraph(line.replace("##", "").strip(), styles['Centrado']))
