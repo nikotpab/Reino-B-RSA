@@ -31,6 +31,18 @@ Reino-B-RSA/
 - Acceso de escritura al directorio de **fuentes** del sistema (el programa instala la fuente *UnifrakturCook* en el primer arranque).  
 
 ---
+##  Instalación de la fuente
+
+La aplicación usa la tipografía **UnifrakturCook** para los textos en pantalla.  
+Debes instalarla en tu sistema antes de ejecutar el programa.
+
+###  Windows
+1. Haz doble clic en el archivo `UnifrakturCook-Bold.ttf` que está en el directorio del proyecto.  
+2. Pulsa en el botón **Instalar**.  
+
+###  macOS
+1. Abre el archivo `UnifrakturCook-Bold.ttf`.  
+2. Haz clic en **Instalar fuente** (se abrirá en la aplicación *Catálogo Tipográfico*). 
 
 ## 📦 Instalación rápida
 
