@@ -1,3 +1,5 @@
+## 📚 Descripción
+
 Aplicación **Tkinter** que explica paso a paso el cifrado RSA mediante pantallas ilustradas. Permite elegir primos \(p\) y \(q\), construir las claves, escribir un mensaje y ver su **cifrado** y **descifrado** en tiempo real. Está pensada con fines **didáctico-educativos** (no para uso criptográfico real).
 
 ---
