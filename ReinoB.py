@@ -733,7 +733,7 @@ def thirtiethPanel(event=None):
     canvas2.create_window(650, 193, window=outTxt1)  
    
 
-    value=RSA()
+   
    
  
     outTxt1.insert(0, value)
@@ -809,9 +809,53 @@ def thirtysecondPanel(event=None):
     canvas2.place(x=0, y=0)
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
+
+    outTxt1 = tk.Entry(root, width=16, font=("UnifrakturCook", 14),justify="center")
+    outTxt2 = tk.Entry(root, width=16, font=("UnifrakturCook", 14),justify="center")
+    
+
+
+    canvas2.create_window(1016, 328, window=outTxt1)  
+    canvas2.create_window(1018, 505, window=outTxt2)  
+    
+
+
+    value="(4,5)"
+    value2=0
+    value3=0
+ 
+    outTxt1.insert(0, value)
+    outTxt1.config(state="readonly",)
+
+    outTxt2.insert(0, value)
+    outTxt2.config(state="readonly",)
+
+    
+
+    btnContinue = canvas2.create_text(
+        1250, 630,
+        text="Continuar...",
+        font=("UnifrakturCook", 40, "bold"),
+        fill="white"
+    )
+
+    def continuar(event=None):
+      
+            thirtythirdPanel()
+
+    canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
+
+def thirtythirdPanel(event=None):
+    img = Image.open("thirtysecond.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
     btnContinue = canvas2.create_text(1250, 630, text="Finalizar", font=("UnifrakturCook", 40, "bold"), fill="white")
     canvas2.tag_bind(btnContinue, "<Button-1>", firstPanel)
-
     #Excepciones
 
 def notCoPrime (panel):
