@@ -6,6 +6,7 @@ import platform
 import ctypes
 from PIL import Image
 from PIL import ImageTk, ImageTk
+from tkinter import font as tkfont
 #pip install pycryptodome
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
@@ -13,10 +14,12 @@ from tkinter import ttk
 import base64
 import math
 ##pip install reportlab
-from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER
+
+
 
 root = tk.Tk()
 
@@ -133,6 +136,48 @@ def deenc_message(cipher_str: str) -> str:
             except Exception:
                 continue
     return bytes_to_visible(out)
+
+def export_to_pdf():
+    doc = SimpleDocTemplate("Referencias.pdf", pagesize=letter)
+    styles = getSampleStyleSheet()
+    story = []
+
+    # estilos personalizados
+    styles.add(ParagraphStyle(name='Justificado', alignment=TA_JUSTIFY))
+    styles.add(ParagraphStyle(name='Centrado', alignment=TA_CENTER, fontName='Helvetica-Bold', fontSize=14))
+
+    references_text = """
+    ## Referencias
+
+    [1] Stack Overflow, Transparent backgrounds on buttons in Tkinter, 2015. [En línea]. Disponible en: https://stackoverflow.com/questions/29857757/transparent-backgrounds-on-buttons-in-tkinter. [Accedido: 14-sept-2025].
+
+    [2] Shutterstock, Devil cartoon - imágenes y vectores, 2025. [En línea]. Disponible en: https://www.shutterstock.com/es/search/devil-cartoon?dd_referrer=https%3A%2F%2Fwww.google.com%2F. [Accedido: 14-sept-2025].
+
+    [3] Wallpapers.com, Kingdom background wallpapers, 2025. [En línea]. Disponible en: https://wallpapers.com/kingdom-background. [Accedido: 14-sept-2025].
+
+    [4] AskPython, RSA Algorithm in Python (example), 2025. [En línea]. Disponible en: https://www-askpython-com.translate.goog/python/examples/rsa-algorithm-in-python?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc. [Accedido: 14-sept-2025].
+
+    [5] Python GUIs, Create GUI with Tkinter (tutorial), 2025. [En línea]. Disponible en: https://www-pythonguis-com.translate.goog/tutorials/create-gui-tkinter/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc. [Accedido: 14-sept-2025].
+
+    [6] Google Fonts, UnifrakturCook, 2025. [En línea]. Disponible en: https://fonts.google.com/specimen/UnifrakturCook. [Accedido: 14-sept-2025].
+
+    [7] Real Python, Create and Modify PDF Files in Python, 19-ene-2025. [En línea]. Disponible en: https://realpython.com/creating-modifying-pdf/ [Accedido: 14-sept-2025].
+    """
+
+    for line in references_text.strip().split('\n'):
+        if line.strip():
+            if "##" in line:
+                story.append(Paragraph(line.replace("##", "").strip(), styles['Centrado']))
+            else:
+                story.append(Paragraph(line.strip(), styles['Justificado']))
+
+    try:
+        doc.build(story)
+        print("PDF generado correctamente: Referencias.pdf")
+    except Exception as e:
+        print(f"Error al exportar el PDF: {e}")
+
+
 
 def firstPanel(event=None):
     img = Image.open("first.png")
@@ -946,9 +991,6 @@ def thirtythirdPanel(event=None):
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
 
-
-
-
     #Excepciones
 
 def notCoPrime (panel):
@@ -1020,50 +1062,6 @@ def dechiper(encryption_b64: str) -> str:
     encryption = base64.b64decode(encryption_b64)
     decryptor = decipher_rsa.decrypt(encryption)
     return decryptor.decode("utf-8")
-
-def export_to_pdf():
-    doc = SimpleDocTemplate("Referencias.pdf", pagesize=letter)
-    styles = getSampleStyleSheet()
-    story = []
-
-
-    styles.add(ParagraphStyle(name='Justificado', alignment=TA_JUSTIFY))
-
-
-    styles.add(ParagraphStyle(name='Centrado', alignment=TA_CENTER, fontName='Helvetica-Bold', fontSize=14))
-
-    references_text = """
-    ## Referencias
-
-    [1] Stack Overflow, Transparent backgrounds on buttons in Tkinter, 2015. [En línea]. Disponible en: https://stackoverflow.com/questions/29857757/transparent-backgrounds-on-buttons-in-tkinter. [Accedido: 14-sept-2025].
-
-    [2] Shutterstock, Devil cartoon - imágenes y vectores, 2025. [En línea]. Disponible en: https://www.shutterstock.com/es/search/devil-cartoon?dd_referrer=https%3A%2F%2Fwww.google.com%2F. [Accedido: 14-sept-2025].
-
-    [3] Wallpapers.com, Kingdom background wallpapers, 2025. [En línea]. Disponible en: https://wallpapers.com/kingdom-background. [Accedido: 14-sept-2025].
-
-    [4] AskPython, RSA Algorithm in Python (example), 2025. [En línea]. Disponible en: https://www-askpython-com.translate.goog/python/examples/rsa-algorithm-in-python?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc. [Accedido: 14-sept-2025].
-
-    [5] Python GUIs, Create GUI with Tkinter (tutorial), 2025. [En línea]. Disponible en: https://www-pythonguis-com.translate.goog/tutorials/create-gui-tkinter/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc. [Accedido: 14-sept-2025].
-
-    [6] Google Fonts, UnifrakturCook, 2025. [En línea]. Disponible en: https://fonts.google.com/specimen/UnifrakturCook. [Accedido: 14-sept-2025].
-
-    [7] Real Python, Create and Modify PDF Files in Python, 19-ene-2025. [En línea]. Disponible en: https://realpython.com/creating-modifying-pdf/ [Accedido: 14-sept-2025].
-    """
-
-
-    for line in references_text.strip().split('\n'):
-        if line.strip():
-            if "##" in line:
-
-                story.append(Paragraph(line.replace("##", "").strip(), styles['Centrado']))
-            else:
-
-                story.append(Paragraph(line.strip(), styles['Justificado']))
-
-    try:
-        doc.build(story)
-    except Exception as e:
-        print(f"Error al exportar el PDF: {e}")
 
 
 def install_font(font_path):
