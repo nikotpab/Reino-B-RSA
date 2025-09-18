@@ -7,7 +7,6 @@ import ctypes
 from PIL import Image
 from PIL import ImageTk, ImageTk
 
-from tkinter import font as tkfont
 #pip install pycryptodome
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
@@ -28,8 +27,6 @@ root = tk.Tk()
 root.title("Reino B RSA")
 root.resizable(False, False)
 root.minsize(1400, 700)
-
-custom_font = tkfont.Font(file="UnifrakturCook-Bold.ttf", size=40)
 
 img = Image.open("main.png")
 img = img.resize((1400,800))
@@ -192,7 +189,7 @@ def firstPanel(event=None):
     canvas2.place(x=0, y=0)
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
-    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=custom_font, fill="white")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
     canvas2.tag_bind(btnContinue, "<Button-1>", secondPanel)
 
 def secondPanel(event=None):
