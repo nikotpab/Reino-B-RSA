@@ -783,9 +783,6 @@ def export_to_pdf():
         print(f"Error al exportar el PDF: {e}")
 
 
-
-export_to_pdf()
-
 def install_font(font_path):
     font_path = os.path.abspath(os.path.expanduser(font_path))
     system = platform.system()
