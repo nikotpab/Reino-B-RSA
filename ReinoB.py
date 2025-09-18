@@ -448,7 +448,8 @@ def seventeenthPanel(event=None):
 
         # 1) Rango básico RSA: 1 < e < phi(n)
         if n1 <= 1 or n1 >= phi:
-            notNumber(seventeenthPanel)
+            notCoPrime(seventeenthPanel)
+
             return
 
         # 2) Única condición requerida: gcd(e, phi) == 1
@@ -812,7 +813,7 @@ def thirtiethPanel(event=None):
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
 
-    outEnc = tk.Entry(root, width=48, font=("UnifrakturCook", 14), justify="center")
+    outEnc = tk.Entry(root, width=40, font=("UnifrakturCook", 14), justify="center")
 
 
     canvas2.create_window(700, 190, window=outEnc)
@@ -851,12 +852,12 @@ def thirtyfirstPanel(event=None):
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
 
-    outTxt1 = tk.Entry(root, width=25, font=("UnifrakturCook", 14),justify="center")
-    outTxt2 = tk.Entry(root, width=25, font=("UnifrakturCook", 14),justify="center")
+    outTxt1 = tk.Entry(root, width=22, font=("UnifrakturCook", 14),justify="center")
+    outTxt2 = tk.Entry(root, width=22, font=("UnifrakturCook", 14),justify="center")
 
 
-    canvas2.create_window(690, 310, window=outTxt1)
-    canvas2.create_window(660, 400, window=outTxt2)
+    canvas2.create_window(760, 309, window=outTxt1)
+    canvas2.create_window(690, 405, window=outTxt2)
 
     global e, d, module, phi, enc_str
     value = e
@@ -929,7 +930,7 @@ def thirtysecondPanel(event=None):
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
 def thirtythirdPanel(event=None):
-    img = Image.open("thirtysecond.png")
+    img = Image.open("thirtythird.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
 
@@ -937,8 +938,16 @@ def thirtythirdPanel(event=None):
     canvas2.place(x=0, y=0)
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
-    btnContinue = canvas2.create_text(700, 630, text="holaaa", font=("UnifrakturCook", 40, "bold"), fill="white")
-    canvas2.tag_bind(btnContinue, "<Button-1>", firstPanel)
+    btnContinue = canvas2.create_text(700, 630, text="Bibliografia", font=("UnifrakturCook", 40, "bold"), fill="white")
+    def continuar(event=None):
+
+        export_to_pdf()
+
+    canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
+
+
+
+
 
     #Excepciones
 
