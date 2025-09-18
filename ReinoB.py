@@ -6,11 +6,13 @@ import platform
 import ctypes
 from PIL import Image
 from PIL import ImageTk, ImageTk
+
 from tkinter import font as tkfont
 #pip install pycryptodome
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 from tkinter import ttk
+
 import base64
 import math
 ##pip install reportlab
@@ -26,6 +28,8 @@ root = tk.Tk()
 root.title("Reino B RSA")
 root.resizable(False, False)
 root.minsize(1400, 700)
+
+custom_font = tkfont.Font(file="UnifrakturCook-Bold.ttf", size=24)
 
 img = Image.open("main.png")
 img = img.resize((1400,800))
@@ -188,7 +192,7 @@ def firstPanel(event=None):
     canvas2.place(x=0, y=0)
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
-    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=(custom_font, 40, "bold"), fill="white")
     canvas2.tag_bind(btnContinue, "<Button-1>", secondPanel)
 
 def secondPanel(event=None):
@@ -983,7 +987,16 @@ def thirtythirdPanel(event=None):
     canvas2.place(x=0, y=0)
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
-    btnContinue = canvas2.create_text(700, 630, text="Bibliografia", font=("UnifrakturCook", 40, "bold"), fill="white")
+    btnContinue = canvas2.create_text(700, 630, text="Bibliografia", font=("UnifrakturCook", 40, "bold"), fill="black")
+    
+    btnExit = canvas2.create_text(1250, 630, text="Salir", font=("UnifrakturCook", 40, "bold"), fill="black")
+
+    def exitProgram(event=None):
+
+        exit()
+
+    canvas2.tag_bind(btnExit, "<Button-1>", exitProgram)
+
     def continuar(event=None):
 
         export_to_pdf()
@@ -1054,14 +1067,6 @@ root.mainloop()
 def exit():
     root.destroy()
 
-def encrypt(msj: str) -> str:
-    encryption = cipher_rsa.encrypt(msj.encode("utf-8"))
-    return base64.b64encode(encryption).decode("utf-8")
-
-def dechiper(encryption_b64: str) -> str:
-    encryption = base64.b64decode(encryption_b64)
-    decryptor = decipher_rsa.decrypt(encryption)
-    return decryptor.decode("utf-8")
 
 
 def install_font(font_path):
