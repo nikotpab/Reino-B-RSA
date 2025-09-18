@@ -255,6 +255,18 @@ def nineteenthPanel(event=None):
     canvas2.create_image(0, 0, image=img, anchor="nw")
     btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
     canvas2.tag_bind(btnContinue, "<Button-1>",twentiethPanel)
+def nineteenthPanel(event=None):
+    img = Image.open("nineteenth.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", twentiethPanel)
+
 
 def twentiethPanel(event=None):
     img = Image.open("twentieth.png")
@@ -266,7 +278,134 @@ def twentiethPanel(event=None):
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
     btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
-    canvas2.tag_bind(btnContinue, "<Button-1>", lambda e: print("doce"))
+    canvas2.tag_bind(btnContinue, "<Button-1>", twentyfirstPanel)
+
+
+def twentyfirstPanel(event=None):
+    img = Image.open("twentyfirst.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", twentysecondPanel)
+
+
+def twentysecondPanel(event=None):
+    img = Image.open("twentysecond.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", twentythirdPanel)
+
+
+def twentythirdPanel(event=None):
+    img = Image.open("twentythird.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", twentyfourthPanel)
+
+
+def twentyfourthPanel(event=None):
+    img = Image.open("twentyfourth.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", twentyfifthPanel)
+
+
+def twentyfifthPanel(event=None):
+    img = Image.open("twentyfifth.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", twentysixthPanel)
+
+
+def twentysixthPanel(event=None):
+    img = Image.open("twentysixth.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", twentyseventhPanel)
+
+
+def twentyseventhPanel(event=None):
+    img = Image.open("twentyseventh.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", notCoPrime)
+
+def notCoPrime (event = None):
+    img = Image.open("notcoprime.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", notNumber)
+
+def notNumber (event = None):
+    img = Image.open("notnumber.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", notPrime)
+
+def notPrime (event = None):
+    img = Image.open("notprime.png")
+    img = img.resize((1400, 800))
+    img = ImageTk.PhotoImage(img)
+
+    canvas2 = tk.Canvas(root, width=1400, height=800, highlightthickness=0, bd=0)
+    canvas2.place(x=0, y=0)
+    canvas2.bg = img
+    canvas2.create_image(0, 0, image=img, anchor="nw")
+    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
+    canvas2.tag_bind(btnContinue, "<Button-1>", lambda e: print("No es un numero primo"))
 
 btn = canvas.create_text(700, 300, text="Iniciar", font=("UnifrakturCook", 40, "bold"), fill="white")
 canvas.tag_bind(btn, "<Button-1>", fistPanel)
@@ -284,6 +423,9 @@ def dechiper(encryption_b64: str) -> str:
     encryption = base64.b64decode(encryption_b64)
     decryptor = decipher_rsa.decrypt(encryption)
     return decryptor.decode("utf-8")
+
+
+
 
 
 ############################################
