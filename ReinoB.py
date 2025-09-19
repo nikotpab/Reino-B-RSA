@@ -1,5 +1,9 @@
 import tkinter as tk
-
+import os
+import shutil
+import subprocess
+import platform
+import ctypes
 from PIL import Image
 from PIL import ImageTk, ImageTk
 #pip install pycryptodome
@@ -734,21 +738,15 @@ def dechiper(encryption_b64: str) -> str:
     decryptor = decipher_rsa.decrypt(encryption)
     return decryptor.decode("utf-8")
 
-
-
-
-
-############################################
-#Funcion para exportar referencias en pdf
 def export_to_pdf():
     doc = SimpleDocTemplate("Referencias.pdf", pagesize=letter)
     styles = getSampleStyleSheet()
     story = []
 
-    # Define un estilo para texto justificado
+
     styles.add(ParagraphStyle(name='Justificado', alignment=TA_JUSTIFY))
 
-    # Define un estilo para el título centrado
+
     styles.add(ParagraphStyle(name='Centrado', alignment=TA_CENTER, fontName='Helvetica-Bold', fontSize=14))
 
     references_text = """
@@ -769,22 +767,47 @@ def export_to_pdf():
     [7] Real Python, Create and Modify PDF Files in Python, 19-ene-2025. [En línea]. Disponible en: https://realpython.com/creating-modifying-pdf/ [Accedido: 14-sept-2025].
     """
 
-    # Procesa cada línea del texto
+
     for line in references_text.strip().split('\n'):
         if line.strip():  # Ignora líneas en blanco
             if "##" in line:
-                # Usa el estilo centrado para el título
+
                 story.append(Paragraph(line.replace("##", "").strip(), styles['Centrado']))
             else:
-                # Usa el estilo justificado para el resto del texto
+
                 story.append(Paragraph(line.strip(), styles['Justificado']))
 
     try:
         doc.build(story)
-        print("PDF exportado exitosamente con formato mejorado!")
     except Exception as e:
         print(f"Error al exportar el PDF: {e}")
 
 
-# Llama a la función para ejecutarla
+
 export_to_pdf()
+
+def install_font(font_path):
+    font_path = os.path.abspath(os.path.expanduser(font_path))
+    system = platform.system()
+    if system == "Windows":
+        fonts_dir = os.path.join(os.environ["WINDIR"], "Fonts")
+        dest = os.path.join(fonts_dir, os.path.basename(font_path))
+        shutil.copy(font_path, dest)
+        FR_PRIVATE = 0x10
+        ctypes.windll.gdi32.AddFontResourceExW(dest, FR_PRIVATE, 0)
+        ctypes.windll.user32.SendMessageW(0xFFFF, 0x001D, 0, 0)
+    elif system == "Darwin":
+        fonts_dir = os.path.expanduser("~/Library/Fonts")
+        os.makedirs(fonts_dir, exist_ok=True)
+        dest = os.path.join(fonts_dir, os.path.basename(font_path))
+        shutil.copy(font_path, dest)
+    else:
+        fonts_dir = os.path.expanduser("~/.local/share/fonts")
+        os.makedirs(fonts_dir, exist_ok=True)
+        dest = os.path.join(fonts_dir, os.path.basename(font_path))
+        shutil.copy(font_path, dest)
+        fc = shutil.which("fc-cache")
+        if fc:
+            subprocess.run([fc, "-f", "-v"], check=False)
+
+install_font("UnifrakturCook-Bold.ttf")
