@@ -718,6 +718,7 @@ def twentyninthPanel(event=None):
     canvas2.tag_bind(btnContinue, "<Button-1>", thirtiethPanel)
 
 def thirtiethPanel(event=None):
+    global messageDechiper
     img = Image.open("thirtieth.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
@@ -726,8 +727,32 @@ def thirtiethPanel(event=None):
     canvas2.place(x=0, y=0)
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
-    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
-    canvas2.tag_bind(btnContinue, "<Button-1>", thirtyfirstPanel)
+
+    outTxt1 = tk.Entry(root, width=21, font=("UnifrakturCook", 14),justify="center")
+    
+    canvas2.create_window(650, 193, window=outTxt1)  
+   
+
+    value=RSA()
+   
+ 
+    outTxt1.insert(0, value)
+    outTxt1.config(state="readonly",)
+
+    
+
+    btnContinue = canvas2.create_text(
+        1250, 630,
+        text="Continuar...",
+        font=("UnifrakturCook", 40, "bold"),
+        fill="white"
+    )
+
+    def continuar(event=None):
+      
+            thirtyfirstPanel()
+
+    canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
 def thirtyfirstPanel(event=None):
     img = Image.open("thirtyfirst.png")
@@ -738,8 +763,42 @@ def thirtyfirstPanel(event=None):
     canvas2.place(x=0, y=0)
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
-    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
-    canvas2.tag_bind(btnContinue, "<Button-1>", thirtysecondPanel)
+
+    outTxt1 = tk.Entry(root, width=25, font=("UnifrakturCook", 14),justify="center")
+    outTxt2 = tk.Entry(root, width=25, font=("UnifrakturCook", 14),justify="center")
+    outTxt3 = tk.Entry(root, width=25, font=("UnifrakturCook", 14),justify="center")
+
+
+    canvas2.create_window(800, 320, window=outTxt1)  
+    canvas2.create_window(780, 425, window=outTxt2)  
+    canvas2.create_window(800, 530, window=outTxt3)  
+
+
+    value="(4,5)"
+    value2=0
+    value3=0
+ 
+    outTxt1.insert(0, value)
+    outTxt1.config(state="readonly",)
+
+    outTxt2.insert(0, value)
+    outTxt2.config(state="readonly",)
+
+    outTxt2.insert(0, value)
+    outTxt3.config(state="readonly",)
+
+    btnContinue = canvas2.create_text(
+        1250, 630,
+        text="Continuar...",
+        font=("UnifrakturCook", 40, "bold"),
+        fill="white"
+    )
+
+    def continuar(event=None):
+      
+            thirtysecondPanel()
+
+    canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
 def thirtysecondPanel(event=None):
     img = Image.open("thirtysecond.png")
