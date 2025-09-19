@@ -29,6 +29,18 @@ canvas.place(x=0, y=0)
 canvas.bg = img
 canvas.create_image(0, 0, image=img, anchor="nw")
 
+p=0
+q=0
+
+module=0
+
+phi=0
+e=0
+d=0
+message=0
+messageChiper=0
+messageDechiper=0
+
 def es_primo(n: int) -> bool:
     if n <= 1:
         return False
@@ -172,34 +184,47 @@ def tenthPanel(event=None):
     )
 
     def continuar(event=None):
+        global p, q, module
         value1 = inpNumb1.get()
-        value2= inpNumb2.get()
+        value2 = inpNumb2.get()
 
+ 
         if value1 == "" or value2 == "":
             print("Campos vacíos")
             whiteException(tenthPanel)
+            return
 
-        elif not value1.isdigit() or not value2.isdigit():
+   
+        if not value1.isdigit() or not value2.isdigit():
             print("No es un número válido")
             notNumber(tenthPanel)
+            return
 
-        else:
-            n1 = int(value1)
-            n2 = int(value2)
+    
+        p = int(value1)
+        q = int(value2)
 
-        if not es_primo(n1):
 
-            print("El número no es primo")
+        if not es_primo(p):
+            print("El primer número no es primo")
             notPrime(tenthPanel)
+            return
 
-        else:
+        if not es_primo(q):
+            print("El segundo número no es primo")
+            notPrime(tenthPanel)
+            return
 
-            eleventhPanel()
+ 
+        module = p * q
+
+        eleventhPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
  
 def eleventhPanel(event=None):
+    global module
     img = Image.open("eleventh.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
@@ -210,11 +235,9 @@ def eleventhPanel(event=None):
     canvas2.create_image(0, 0, image=img, anchor="nw")
 
     outNumb1 = tk.Entry(root, width=18, font=("UnifrakturCook", 14),justify="center" )
-
-    #Aqui debe poner la variable de la multiplicacion 
-    multiplication=1000  
-    outNumb1.insert(0, multiplication)
-    outNumb1.config(state="readonly",)
+   
+    outNumb1.insert(0, module)
+    outNumb1.config(state="readonly")
   
 
     canvas2.create_window(930, 240, window=outNumb1)  
@@ -259,7 +282,8 @@ def thirteenthPanel(event=None):
     canvas2.tag_bind(btnContinue, "<Button-1>",fourteenthPanel)
 
 def fourteenthPanel(event=None):
-    img = Image.open("eighteenth.png")
+    global p, q, phi
+    img = Image.open("fourteenth.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
 
@@ -269,12 +293,15 @@ def fourteenthPanel(event=None):
     canvas2.create_image(0, 0, image=img, anchor="nw")
 
     out1 = tk.Entry(root, width=20, font=("UnifrakturCook", 14),justify="center",bg="black" )
-    value="Valor"
+
+    phi=(p-1)*(q-1)
+
+    value=phi
     out1.insert(0, value)
     out1.config(state="readonly",)
   
 
-    canvas2.create_window(960, 193, window=out1)  
+    canvas2.create_window(960, 293, window=out1)  
 
    
     btnContinue = canvas2.create_text(
@@ -286,7 +313,7 @@ def fourteenthPanel(event=None):
 
     def continuar(event=None):
      
-        nineteenthPanel()
+        fifteenthPanel()
     
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
@@ -339,6 +366,7 @@ def seventeenthPanel(event=None):
     )
 
     def continuar(event=None):
+        global p, q, phi,e
         value1 = inpNumb1.get()
         
 
@@ -353,19 +381,20 @@ def seventeenthPanel(event=None):
         else:
             n1 = int(value1)
 
-        if not es_primo(n1):
+        if not son_coprimos(n1,phi):
 
-            print("El número no es primo")
+            print("El número no es coprimo")
             notPrime(seventeenthPanel)
 
         else:
-            
+            e = int(value1)
             eighteenthPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
 
 def eighteenthPanel(event=None):
+    global e,module
     img = Image.open("eighteenth.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
@@ -374,12 +403,37 @@ def eighteenthPanel(event=None):
     canvas2.place(x=0, y=0)
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
-    btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
-    canvas2.tag_bind(btnContinue, "<Button-1>", nineteenthPanel)
+
+    outTxt1 = tk.Entry(root, width=21, font=("UnifrakturCook", 14),justify="center")
+    
+    canvas2.create_window(960, 193, window=outTxt1)  
+   
+
+    value=f"({e}, {module})"
+   
+ 
+    outTxt1.insert(0, value)
+    outTxt1.config(state="readonly",)
+
+    
+
+    btnContinue = canvas2.create_text(
+        1250, 630,
+        text="Continuar...",
+        font=("UnifrakturCook", 40, "bold"),
+        fill="white"
+    )
+
+    def continuar(event=None):
+      
+            nineteenthPanel()
+
+    canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
 
 
 def nineteenthPanel(event=None):
+    global module,phi
     img = Image.open("nineteenth.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
@@ -395,11 +449,9 @@ def nineteenthPanel(event=None):
     canvas2.create_window(870, 315, window=outTxt1)  
     canvas2.create_window(916, 350, window=outTxt2)
 
-    value="Valor 1"
-    value2="valor 2"
+    value=module
+    value2=phi
  
-
-    
     outTxt1.insert(0, value)
     outTxt1.config(state="readonly",)
 
@@ -420,6 +472,7 @@ def nineteenthPanel(event=None):
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
 def twentiethPanel(event=None):
+    global e,phi,d
     img = Image.open("twentieth.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
@@ -438,15 +491,13 @@ def twentiethPanel(event=None):
     canvas2.create_window(480, 217, window=outTxt2)
     canvas2.create_window(984, 250, window=outTxt3)
 
-    value="Valor 1"
-    value2="valor 2"
-    value3="valor 3"
+    d= pow(e, -1, phi)
+    value3=d
 
-    
-    outTxt1.insert(0, value)
+    outTxt1.insert(0, e)
     outTxt1.config(state="readonly",)
 
-    outTxt2.insert(0, value2)
+    outTxt2.insert(0, phi)
     outTxt2.config(state="readonly",)
 
     outTxt3.insert(0, value3)
@@ -532,9 +583,8 @@ def twentysecondPanel(event=None):
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
-
-
 def twentythirdPanel(event=None):
+    global message
     img = Image.open("twentythird.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
@@ -546,10 +596,8 @@ def twentythirdPanel(event=None):
 
     inpTxt1 = tk.Entry(root, width=19, font=("UnifrakturCook", 10))
     
-
     canvas2.create_window(1030, 337, window=inpTxt1)  
    
-
     btnContinue = canvas2.create_text(
         1250, 630,
         text="Continuar...",
@@ -559,6 +607,7 @@ def twentythirdPanel(event=None):
 
     def continuar(event=None):
         value1 = inpTxt1.get()
+        message=value1
         
     #Aqui esta para que ponga la logica para el cifrado 
         if value1 == "" :
@@ -607,7 +656,6 @@ def twentyfourthPanel(event=None):
         twentyfifthPanel()
     
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
-
 
 def twentyfifthPanel(event=None):
     img = Image.open("twentyfifth.png")
@@ -665,7 +713,7 @@ def twentyseventhPanel(event=None):
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
     btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
-    canvas2.tag_bind(btnContinue, "<Button-1>", notCoPrime)
+    canvas2.tag_bind(btnContinue, "<Button-1>")
 
 
     #Excepciones
