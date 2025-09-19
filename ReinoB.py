@@ -44,6 +44,8 @@ d=0
 message=0
 messageChiper=0
 messageDechiper=0
+message_encrypted_b64 = ""
+message_decrypted_str = ""
 
 def is_prime(n: int) -> bool:
     if n <= 1:
@@ -524,6 +526,7 @@ def twentysecondPanel(event=None):
     value2 = f"d = {d}"
     value3 = f"n = {module}"
     value4 = f"φ(n) = {phi}"
+
     outNumb1.insert(0, value)
     outNumb1.config(state="readonly",)
     outNumb1.focus()
@@ -581,12 +584,10 @@ def twentythirdPanel(event=None):
         value1 = inpTxt1.get()
         message=value1
 
-    #Aqui esta para que ponga la logica para el cifrado
         if value1 == "" :
             print("Campos vacios")
             whiteException(twentythirdPanel)
         else:
-            #Mas exactamente aqui
            twentyfourthPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
@@ -601,23 +602,22 @@ def twentyfourthPanel(event=None):
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
 
-    outNumb1 = tk.Entry(root, width=21, font=("UnifrakturCook", 12),justify="center",bg="black" )
-    outNumb2 = tk.Entry(root, width=21, font=("UnifrakturCook", 12),justify="center",bg="black" )
-    global message, module, e, messageChiper
-    try:
-        m = int(message)
-    except:
-        m = int.from_bytes(message.encode("utf-8"), "big") % module
-    c = pow(m, e, module)
-    messageChiper = c
-    value = f"m = {m}"
-    value2 = f"c = {c}"
-    outNumb1.insert(0, value)
+    outNumb1 = tk.Entry(root, width=21, font=("UnifrakturCook", 12), justify="center", bg="black", fg="white")
+    outNumb2 = tk.Entry(root, width=21, font=("UnifrakturCook", 12), justify="center", bg="black", fg="white")
+
+    global e, d, module, phi
+    value = e
+    value2 = d
+    value3 = module
+    value4 = phi
+
+    outNumb1.insert(0, "("+str(value3)+","+str(value)+")")
     outNumb1.config(state="readonly")
     outNumb1.focus()
-    outNumb2.insert(0, value2)
+    outNumb2.insert(0, "("+str(value3)+","+str(value2 )+")")
     outNumb2.config(state="readonly")
     outNumb2.focus()
+
     canvas2.create_window(695, 345, window=outNumb1)
     canvas2.create_window(695, 458, window=outNumb2)
 
@@ -629,7 +629,6 @@ def twentyfourthPanel(event=None):
     )
 
     def continuar(event=None):
-
         twentyfifthPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
@@ -644,16 +643,20 @@ def twentyfifthPanel(event=None):
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
 
-    outNumb1 = tk.Entry(root, width=18, font=("UnifrakturCook", 12),justify="center",bg="black" )
-    global d, module, messageChiper, messageDechiper
-    m2 = pow(messageChiper, d, module)
-    messageDechiper = m2
-    value = f"m' = {m2}"
-    outNumb1.insert(0, value)
+    outNumb1 = tk.Entry(root, width=18, font=("UnifrakturCook", 12), justify="center", bg="black")
+
+    global d, e, module, messageChiper, messageDechiper, message_decrypted_str
+
+    value = e
+    value2 = module
+
+    outNumb1.insert(0, "("+str(value)+","+str(value2)+")")
     outNumb1.config(state="readonly")
     outNumb1.focus()
-    canvas2.create_window(950, 171, window=outNumb1)  
-   
+
+    canvas2.create_window(950, 171, window=outNumb1)
+
+
     btnContinue = canvas2.create_text(
         1250, 630,
         text="Continuar...",
@@ -662,13 +665,13 @@ def twentyfifthPanel(event=None):
     )
 
     def continuar(event=None):
-   
-       twentysixthPanel()
-    
+        twentysixthPanel()
+
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
 
 def twentysixthPanel(event=None):
+    global message_encrypted_b64, message_decrypted_str
     img = Image.open("twentysixth.png")
     img = img.resize((1400, 800))
     img = ImageTk.PhotoImage(img)
@@ -677,6 +680,7 @@ def twentysixthPanel(event=None):
     canvas2.place(x=0, y=0)
     canvas2.bg = img
     canvas2.create_image(0, 0, image=img, anchor="nw")
+
     btnContinue = canvas2.create_text(1250, 630, text="Continuar...", font=("UnifrakturCook", 40, "bold"), fill="white")
     canvas2.tag_bind(btnContinue, "<Button-1>", twentyseventhPanel)
 
