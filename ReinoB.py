@@ -491,13 +491,9 @@ def twentiethPanel(event=None):
     canvas2.create_window(480, 217, window=outTxt2)
     canvas2.create_window(984, 250, window=outTxt3)
 
-  
-
     d= pow(e, -1, phi)
-
     value3=d
 
-    
     outTxt1.insert(0, e)
     outTxt1.config(state="readonly",)
 
@@ -587,8 +583,6 @@ def twentysecondPanel(event=None):
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
-
-
 def twentythirdPanel(event=None):
     global message
     img = Image.open("twentythird.png")
@@ -602,10 +596,8 @@ def twentythirdPanel(event=None):
 
     inpTxt1 = tk.Entry(root, width=19, font=("UnifrakturCook", 10))
     
-
     canvas2.create_window(1030, 337, window=inpTxt1)  
    
-
     btnContinue = canvas2.create_text(
         1250, 630,
         text="Continuar...",
@@ -664,7 +656,6 @@ def twentyfourthPanel(event=None):
         twentyfifthPanel()
     
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
-
 
 def twentyfifthPanel(event=None):
     img = Image.open("twentyfifth.png")
