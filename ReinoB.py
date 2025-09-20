@@ -10,6 +10,7 @@ from PIL import ImageTk, ImageTk
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 from tkinter import ttk
+from tkinter import messagebox
 import base64
 import math
 ##pip install reportlab
@@ -132,7 +133,10 @@ def deenc_message(cipher_str: str) -> str:
                 out.append(m & 0xFF)
             except Exception:
                 continue
-    return bytes_to_visible(out)
+    try:
+        return out.decode("utf-8")
+    except Exception:
+        return bytes_to_visible(out)
 
 def firstPanel(event=None):
     img = Image.open("first.png")
@@ -462,7 +466,6 @@ def seventeenthPanel(event=None):
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
 
-
 def eighteenthPanel(event=None):
     global e,module
     img = Image.open("eighteenth.png")
@@ -493,8 +496,6 @@ def eighteenthPanel(event=None):
             nineteenthPanel()
 
     canvas2.tag_bind(btnContinue, "<Button-1>", continuar)
-
-
 
 def nineteenthPanel(event=None):
     global module,phi
@@ -821,6 +822,21 @@ def thirtiethPanel(event=None):
     if module <= 1 or e <= 0 or d <= 0:
         enc_str = ""
     else:
+        try:
+            m_raw = int(message)
+        except Exception:
+            try:
+                m_raw = int.from_bytes(str(message).encode("utf-8"), "big")
+            except Exception:
+                m_raw = 0
+        if m_raw >= module:
+            messagebox.showerror(
+                "Mensaje demasiado grande",
+                "El mensaje convertido a número es mayor o igual que n.\n\nPara continuar, usa p y q más grandes (aumenta n) o ingresa un mensaje más corto."
+            )
+            enc_str = ""
+            tenthPanel()
+            return
         enc_str = enc_message(message)
 
     outEnc.insert(0, enc_str)
@@ -996,8 +1012,6 @@ canvas.tag_bind(btn, "<Button-1>", firstPanel)
 btn = canvas.create_text(700, 500, text="Salir", font=("UnifrakturCook", 40, "bold"), fill="white")
 canvas.tag_bind(btn, "<Button-1>", exit)
 
-
-
 root.mainloop()
 
 def exit():
@@ -1040,7 +1054,6 @@ def export_to_pdf():
 
     [7] Real Python, Create and Modify PDF Files in Python, 19-ene-2025. [En línea]. Disponible en: https://realpython.com/creating-modifying-pdf/ [Accedido: 14-sept-2025].
     """
-
 
     for line in references_text.strip().split('\n'):
         if line.strip():
